@@ -3,6 +3,7 @@ package com.basaran.rentacar.config;
 import com.basaran.rentacar.Entity.User;
 import com.basaran.rentacar.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,11 @@ public class AdminInitializer implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Value("${admin.default.email}")
+    private String defaultAdminEmail;
 
+    @Value("${admin.default.password}")
+    private String defaultAdminPassword;
     @Override
     public void run(String... args) {
         Optional<User> existingAdmin = userRepository.findByEmail("admin@rentacar.com");
@@ -27,8 +32,8 @@ public class AdminInitializer implements CommandLineRunner {
             User admin = new User();
             admin.setFirstName("Admin");
             admin.setLastName("User");
-            admin.setEmail("admin@rentacar.com");
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setEmail(defaultAdminEmail);
+            admin.setPassword(passwordEncoder.encode(defaultAdminPassword));
             admin.setBirthDate(LocalDate.of(1990, 1, 1));
             admin.setPhoneNumber("0000000000");
             admin.setRoles(Set.of("ROLE_ADMIN"));
