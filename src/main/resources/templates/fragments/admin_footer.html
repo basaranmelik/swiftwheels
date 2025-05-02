@@ -1,0 +1,12 @@
+<!-- templates/fragments/admin-footer.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<footer th:fragment="admin-footer" class="text-white text-center py-3 mt-5" style="background-color: #4C9398;">
+    <div class="container">
+        <p class="mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> SwiftWheels Admin Paneli</p>
+    </div>
+</footer>
+</body>
+</html>

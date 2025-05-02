@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{admin_base :: head('Araç Ekle')}"></th:block>
+</head>
+<body th:replace="~{admin_base :: body(~{::main}, 'Araç Ekle', 'admin-vehicle-add')}">
+
+<main class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Yeni Araç Ekle</h2>
+        <a href="/admin/vehicles/list" class="btn btn-outline-secondary">&larr; Geri</a>
+    </div>
+
+    <div class="card shadow-sm p-4">
+        <form th:action="@{/admin/vehicles/add}" method="post" enctype="multipart/form-data" th:object="${vehicleDTO}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <div class="row g-3">
+                <div class="col-md-6"><input type="text" class="form-control" th:field="*{vehicle_type}" placeholder="Araç Türü"></div>
+                <div class="col-md-6"><input type="text" class="form-control" th:field="*{make}" placeholder="Marka"></div>
+                <div class="col-md-6"><input type="text" class="form-control" th:field="*{model}" placeholder="Model"></div>
+                <div class="col-md-6"><input type="number" class="form-control" th:field="*{year}" placeholder="Yıl"></div>
+                <div class="col-md-6"><input type="number" class="form-control" th:field="*{km}" placeholder="KM"></div>
+                <div class="col-md-6"><input type="text" class="form-control" th:field="*{color}" placeholder="Renk"></div>
+                <div class="col-md-6"><input type="text" class="form-control" th:field="*{enginePower}" placeholder="Motor Gücü"></div>
+                <div class="col-md-6"><input type="text" class="form-control" th:field="*{engineCapacity}" placeholder="Motor Hacmi"></div>
+                <div class="col-md-6"><input type="number" class="form-control" th:field="*{price}" placeholder="Fiyat"></div>
+                <div class="col-md-6"><input type="text" class="form-control" th:field="*{fuel}" placeholder="Yakıt Türü"></div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" th:field="*{availability}" id="availability">
+                        <label class="form-check-label" for="availability">Kiralanabilir</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="imageFile" class="form-label">Görsel Yükle</label>
+                    <input type="file" class="form-control" name="imageFile" id="imageFile">
+                </div>
+            </div>
+
+            <div class="mt-4 d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">Kaydet</button>
+            </div>
+        </form>
+
+        <div class="mt-3" th:if="${param.success}">
+            <div class="alert alert-success">Araç başarıyla eklendi.</div>
+        </div>
+        <div class="mt-3" th:if="${param.error}">
+            <div class="alert alert-danger">Kayıt sırasında bir hata oluştu.</div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

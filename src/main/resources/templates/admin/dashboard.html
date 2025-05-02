@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{admin_base :: head('Yönetim Paneli')}"></th:block>
+</head>
+<body th:replace="~{admin_base :: body(~{::main}, 'Yönetim Paneli', 'admin-dashboard')}">
+
+<main>
+    <h2 class="text-center mb-5">Yönetim Paneli</h2>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+            <div class="card border-primary h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Kullanıcılar</h5>
+                    <p class="card-text">Kayıtlı kullanıcıları görüntüle ve yönet.</p>
+                    <a th:href="@{/admin/users/list}" class="btn btn-primary">Kullanıcı Listesi</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-success h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Araçlar</h5>
+                    <p class="card-text">Sisteme kayıtlı tüm araçları incele ve düzenle.</p>
+                    <a th:href="@{/admin/vehicles/list}" class="btn btn-success">Araç Listesi</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-warning h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Kiralama Kayıtları</h5>
+                    <p class="card-text">Kiralama işlemlerini görüntüle ve yönet.</p>
+                    <a th:href="@{/admin/rentals/list}" class="btn btn-warning text-white">Kiralama Listesi</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

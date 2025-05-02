@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<!-- Navbar Fragment -->
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark" style="background-color: #4C9398;">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            SwiftWheels
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}" th:classappend="${currentPage == 'home'} ? 'active' : ''">
+                        <i class="fas fa-home me-1"></i> Ana Sayfa
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/vehicles/list}" th:classappend="${currentPage == 'vehicle_list'} ? 'active' : ''">
+                        <i class="fas fa-car me-1"></i> Araç Kirala
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/rentals/list}" th:classappend="${currentPage == 'rented_list'} ? 'active' : ''">
+                        <i class="fas fa-receipt me-1"></i> Kiralalama Kayıtlarım
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Giriş durumuna göre değişen sağ taraf -->
+            <div class="d-flex">
+                <!-- Kullanıcı giriş yapmamışsa (anonim) -->
+                <div sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}" class="btn btn-outline-light me-2">
+                        <i class="fas fa-sign-in-alt me-1"></i> Giriş Yap
+                    </a>
+                    <a th:href="@{/register}" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-1"></i> Kayıt Ol
+                    </a>
+                </div>
+
+                <!-- Kullanıcı giriş yapmışsa (kimliği doğrulanmış) -->
+                <div sec:authorize="isAuthenticated()" class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span sec:authentication="name">Kullanıcı</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/profile}">
+                                <i class="fas fa-id-card me-2"></i> Profilim
+                            </a>
+                        </li>
+                        <li sec:authorize="hasRole('ADMIN')">
+                            <a class="dropdown-item" th:href="@{/admin/dashboard}">
+                                <i class="fas fa-cogs me-2"></i> Admin Paneli
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

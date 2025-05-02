@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{base :: head('Ana Sayfa')}"></th:block>
+</head>
+<body th:replace="~{base :: body(~{::main}, 'Ana Sayfa', 'home')}">
+<main class="container my-5">
+    <div class="text-center">
+        <h1>SwiftWheels Araç Kiralama</h1>
+        <p class="lead">Hoş geldiniz! Uygun fiyatlarla güvenilir araç kiralama deneyimi sizi bekliyor.</p>
+        <a th:href="@{/vehicles/list}" class="btn btn-primary btn-lg mt-3">Araçları Görüntüle</a>
+    </div>
+</main>
+</body>
+</html>

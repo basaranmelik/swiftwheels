@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{base :: head('Araç Kiralama')}"></th:block>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container my-5 flex-grow-1">
+    <div class="row justify-content-center">
+        <div class="col-md-6 bg-white p-4 rounded shadow-sm">
+
+            <div class="mb-3">
+                <a href="/vehicles/list" class="btn btn-secondary">&larr; Geri</a>
+            </div>
+
+            <h3 class="text-center mb-4">Araç Kiralama</h3>
+
+            <form th:action="@{/rentals/add}" method="post">
+                <!-- Araç ID -->
+                <input type="hidden" name="vehicleId" th:value="${vehicleId}" />
+                <!-- Günlük fiyat -->
+                <input type="hidden" id="dailyPrice" th:value="${vehicle.price}" />
+
+                <div class="mb-3">
+                    <label for="rentDate" class="form-label">Kiralama Tarihi</label>
+                    <input type="date" class="form-control" id="rentDate" name="rentDate" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="returnDate" class="form-label">Teslim Tarihi</label>
+                    <input type="date" class="form-control" id="returnDate" name="returnDate" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="totalPrice" class="form-label">Toplam Ücret (₺)</label>
+                    <input type="number" step="0.01" class="form-control" id="totalPrice" name="totalPrice" readonly required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Toplam Gün Sayısı</label>
+                    <input type="text" class="form-control" id="dayCount" readonly>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Kirala</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<div class="mt-auto" th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const rentDateInput = document.getElementById('rentDate');
+    const returnDateInput = document.getElementById('returnDate');
+    const totalPriceInput = document.getElementById('totalPrice');
+    const dayCountInput = document.getElementById('dayCount');
+    const dailyPrice = parseFloat(document.getElementById('dailyPrice').value);
+
+    const today = new Date().toISOString().split('T')[0];
+    rentDateInput.min = today;
+    returnDateInput.min = today;
+    rentDateInput.value = today;
+
+    rentDateInput.addEventListener('change', () => {
+        returnDateInput.min = rentDateInput.value;
+        if (new Date(returnDateInput.value) < new Date(rentDateInput.value)) {
+            returnDateInput.value = rentDateInput.value;
+        }
+        calculatePrice();
+    });
+
+    returnDateInput.addEventListener('change', calculatePrice);
+
+    function calculatePrice() {
+        const rentDate = new Date(rentDateInput.value);
+        const returnDate = new Date(returnDateInput.value);
+
+        if (rentDate && returnDate && returnDate > rentDate) {
+            const diffTime = returnDate - rentDate;
+            const dayCount = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const total = dayCount * dailyPrice;
+            totalPriceInput.value = total.toFixed(2);
+            dayCountInput.value = dayCount + " gün";
+        } else {
+            totalPriceInput.value = '';
+            dayCountInput.value = '';
+        }
+    }
+
+    window.addEventListener('load', calculatePrice);
+</script>
+</body>
+</html>

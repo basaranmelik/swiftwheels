@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{admin_base :: head('Araç Detay')}"></th:block>
+</head>
+<body th:replace="~{admin_base :: body(~{::main}, 'Araç Detay', 'admin-vehicle-detail')}">
+
+<main class="container my-5">
+    <h2 class="text-center mb-4" th:text="${vehicle.make + ' ' + vehicle.model}">Araç Detayı</h2>
+
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <img th:if="${vehicleImage != null}"
+                 th:src="'data:image/jpeg;base64,' + ${vehicleImage}"
+                 class="img-fluid border"
+                 alt="Araç Görseli" />
+        </div>
+
+        <div class="col-md-7">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Tip:</strong> <span th:text="${vehicle.vehicle_type}"></span></li>
+                <li class="list-group-item"><strong>Yıl:</strong> <span th:text="${vehicle.year}"></span></li>
+                <li class="list-group-item"><strong>KM:</strong> <span th:text="${vehicle.km}"></span></li>
+                <li class="list-group-item"><strong>Renk:</strong> <span th:text="${vehicle.color}"></span></li>
+                <li class="list-group-item"><strong>Motor Gücü:</strong> <span th:text="${vehicle.enginePower}"></span></li>
+                <li class="list-group-item"><strong>Motor Hacmi:</strong> <span th:text="${vehicle.engineCapacity}"></span></li>
+                <li class="list-group-item"><strong>Yakıt Türü:</strong> <span th:text="${vehicle.fuel}"></span></li>
+                <li class="list-group-item"><strong>Fiyat:</strong> ₺<span th:text="${vehicle.price}"></span></li>
+                <li class="list-group-item">
+                    <strong>Müsaitlik Durumu:</strong>
+                    <span th:if="${vehicle.availability}" class="badge bg-success">Kiralanabilir</span>
+                    <span th:if="${!vehicle.availability}" class="badge bg-danger">Kiralanamaz</span>
+                </li>
+
+            </ul>
+
+            <div class="mt-4">
+                <a th:href="@{/admin/vehicles/list}" class="btn btn-outline-secondary">Listeye Dön</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

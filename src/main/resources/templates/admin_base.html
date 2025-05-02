@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org" class="h-100">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ?: 'Araç Kiralama Sitesi'">Araç Kiralama Sitesi</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Sticky footer styles */
+        html, body {
+          height: 100%;
+        }
+
+        body {
+          display: flex;
+          flex-direction: column;
+        }
+
+        main {
+          flex: 1 0 auto; /* Bu, içeriğin genişlemesini sağlar */
+        }
+
+        .footer {
+          flex-shrink: 0; /* Footer'ın küçülmesini engeller */
+        }
+    </style>
+</head>
+<body th:fragment="body(content, title, currentPage)" class="d-flex flex-column h-100">
+<!-- Navbar -->
+<div th:replace="~{fragments/admin_navbar :: navbar}"></div>
+
+<!-- Ana içerik -->
+<main class="flex-grow-1 py-4">
+    <div class="container">
+        <th:block th:replace="${content}"></th:block>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/admin_footer :: footer}"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

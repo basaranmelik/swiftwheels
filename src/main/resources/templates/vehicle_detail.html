@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{base :: head('Araç Detay')}"></th:block>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container my-5 flex-grow-1">
+    <h2 class="mb-4 text-center" th:text="${vehicle.make + ' ' + vehicle.model}">Araç Detayı</h2>
+
+    <div class="row g-4 align-items-start">
+        <div class="col-md-5">
+            <img th:if="${vehicleImage != null}"
+                 th:src="'data:image/jpeg;base64,' + ${vehicleImage}"
+                 class="img-fluid border" alt="Araç Görseli" />
+        </div>
+        <div class="col-md-7">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Yıl:</strong> <span th:text="${vehicle.year}"></span></li>
+                <li class="list-group-item"><strong>KM:</strong> <span th:text="${vehicle.km}"></span></li>
+                <li class="list-group-item"><strong>Renk:</strong> <span th:text="${vehicle.color}"></span></li>
+                <li class="list-group-item"><strong>Motor Gücü:</strong> <span th:text="${vehicle.enginePower}"></span></li>
+                <li class="list-group-item"><strong>Motor Hacmi:</strong> <span th:text="${vehicle.engineCapacity}"></span></li>
+                <li class="list-group-item"><strong>Yakıt Türü:</strong> <span th:text="${vehicle.fuel}"></span></li>
+                <li class="list-group-item"><strong>Fiyat:</strong> ₺<span th:text="${vehicle.price}"></span></li>
+                <li class="list-group-item">
+                    <strong>Müsaitlik Durumu:</strong>
+                    <span th:if="${vehicle.availability}" class="badge bg-success">Kiralanabilir</span>
+                    <span th:if="${!vehicle.availability}" class="badge bg-danger">Kiralanamaz</span>
+                </li>
+                <li class="list-group-item"><strong>Tip:</strong> <span th:text="${vehicle.vehicle_type}"></span></li>
+            </ul>
+            <div class="mt-4">
+                <a th:if="${vehicle.availability}"
+                   th:href="@{'/rentals/form/' + ${vehicle.id}}"
+                   class="btn btn-success me-2">Aracı Kirala</a>
+
+                <button th:if="${!vehicle.availability}"
+                        class="btn btn-secondary me-2" disabled>Kiralanamaz</button>
+
+                <a th:href="@{/vehicles/list}" class="btn btn-outline-secondary">Listeye Dön</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="mt-auto" th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
