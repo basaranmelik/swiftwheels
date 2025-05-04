@@ -4,7 +4,7 @@
     <th:block th:replace="~{admin_base :: head('Araç Listesi')}"></th:block>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+<body th:replace="~{admin_base :: body(~{::main}, 'Araç Listesi', 'admin-users-list')}">
 
 <main class="container my-4 flex-grow-1">
     <h2 class="text-center mb-4">Araçlar</h2>
@@ -38,7 +38,7 @@
 
     <!-- Silme başarı mesajı -->
     <div th:if="${param.deleted}">
-        <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <div class="alert alert-success d-flex align-items-center" role="alert">
             <i class="fas fa-exclamation-triangle me-2"></i>
             <div>
                 Araç başarıyla silindi.
@@ -52,6 +52,15 @@
             <i class="fas fa-exclamation-triangle me-2"></i>
             <div>
                 Araç eklenirken hata oluştu.
+            </div>
+        </div>
+    </div>
+    <!-- Hata mesajları -->
+    <div th:if="${param.error != null and param.error.contains('rental')}">
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div>
+                Kiralanmış araç silinemez.
             </div>
         </div>
     </div>
