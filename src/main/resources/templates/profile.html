@@ -11,13 +11,9 @@
       margin-top: 2rem;
       margin-bottom: 2rem;
     }
-    .btn-delete {
-      float: right;
-    }
   </style>
 </head>
 <body th:replace="~{base :: body(~{::main}, 'Profilim', 'profile')}">
-
 <main>
   <div class="row justify-content-center">
     <div class="col-md-8">
@@ -25,20 +21,19 @@
         <h2 class="text-center mb-4">Profil Bilgilerim</h2>
 
         <!-- Başarı Mesajı -->
-        <div th:if="${param.success == 'profileUpdated'}" class="alert alert-success">
+        <div th:if="${param.success}" class="alert alert-success">
           Profil başarıyla güncellendi.
         </div>
 
-        <!-- Hata Mesajı (Genel) -->
+        <!-- Hata Mesajları -->
         <div th:if="${param.error != null and param.error.contains('profileUpdateError')}" class="alert alert-danger">
           Profil güncellenirken bir hata oluştu.
         </div>
-
-        <!-- Hata Mesajı (Hesap Silme) -->
         <div th:if="${param.error != null and param.error.contains('accountDeleteError')}" class="alert alert-danger">
           Kiralama yapmış hesap silinemez.
         </div>
 
+        <!-- Profil Güncelleme Formu -->
         <form th:action="@{/profile/update}" method="post">
           <div class="mb-3">
             <label class="form-label">Ad</label>
@@ -61,27 +56,23 @@
             <input type="text" name="phoneNumber" class="form-control" th:value="${user.phoneNumber}">
           </div>
 
-          <div class="d-flex justify-content-between">
-            <button type="submit" class="btn btn-success">
-              <i class="fas fa-save me-1"></i> Güncelle
-            </button>
-            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-              <i class="fas fa-trash-alt me-1"></i> Hesabı Sil
-            </button>
-          </div>
+          <button type="submit" class="btn btn-success">
+            <i class="fas fa-save me-1"></i> Güncelle
+          </button>
         </form>
+
+        <!-- Hesap Silme Formu (Ayrı) -->
+        <form th:action="@{/profile/delete}" th:method="post" class="mt-3">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          <button type="submit" class="btn btn-danger"
+                  onclick="return confirm('Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')">
+            <i class="fas fa-trash-alt me-1"></i> Hesabı Sil
+          </button>
+        </form>
+
       </div>
     </div>
   </div>
 </main>
-
-<script>
-  function confirmDelete() {
-    if (confirm("Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.")) {
-      window.location.href = "/profile/delete";
-    }
-  }
-</script>
-
 </body>
 </html>

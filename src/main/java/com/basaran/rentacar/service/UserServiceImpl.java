@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public void deleteByEmail(String email) {
         userRepository.deleteByEmail(email);
