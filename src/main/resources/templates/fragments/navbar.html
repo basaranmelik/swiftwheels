@@ -15,17 +15,17 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/}" th:classappend="${currentPage == 'home'} ? 'active' : ''">
+                    <a class="nav-link" th:href="@{/}">
                         <i class="fas fa-home me-1"></i> Ana Sayfa
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/vehicles/list}" th:classappend="${currentPage == 'vehicle_list'} ? 'active' : ''">
+                    <a class="nav-link" th:href="@{/vehicles/list}">
                         <i class="fas fa-car me-1"></i> Araç Kirala
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/rentals/list}" th:classappend="${currentPage == 'rented_list'} ? 'active' : ''">
+                    <a class="nav-link" th:href="@{/rentals/list}">
                         <i class="fas fa-receipt me-1"></i> Kiralalama Kayıtlarım
                     </a>
                 </li>

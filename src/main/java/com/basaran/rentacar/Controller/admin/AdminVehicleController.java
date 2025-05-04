@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -19,12 +20,22 @@ public class AdminVehicleController {
 
     // Tüm araçları listeleyen endpoint
     @GetMapping("/list")
-    public String listVehicles(Model model) {
-        List<VehicleDTO> vehicles = vehicleService.getAllVehicles(); // Tüm araçlar alınır
+    public String listVehicles(@RequestParam(required = false) String search, Model model) {
+        List<VehicleDTO> vehicles;
+
+        if (search != null && !search.isEmpty()) {
+            // Arama yapılacaksa, arama sonucu araçları getir
+            vehicles = vehicleService.searchByMakeOrModel(search);
+        } else {
+            // Eğer arama yoksa, tüm araçları listele
+            vehicles = vehicleService.getAllVehicles();
+        }
+
         model.addAttribute("vehicles", vehicles);
-        model.addAttribute("vehicleDTO", new VehicleDTO());// Model'e eklenir
-        return "admin/vehicle_list"; // İlgili HTML template render edilir
+        model.addAttribute("searchTerm", search);  // Arama terimini formda göster
+        return "admin/vehicle_list";
     }
+
 
     // Araç ekleme formunu gösteren endpoint
     @GetMapping("/add")
@@ -36,19 +47,30 @@ public class AdminVehicleController {
     // Yeni aracı kaydeden endpoint
     @PostMapping("/add")
     public String addVehicle(@ModelAttribute VehicleDTO vehicleDTO,
-                             @RequestParam("imageFile") MultipartFile imageFile) {
+                             @RequestParam("imageFile") MultipartFile imageFile,
+                             RedirectAttributes redirectAttributes) {
         try {
             // Görsel dosyası varsa byte olarak DTO'ya set edilir
             if (imageFile != null && !imageFile.isEmpty()) {
                 vehicleDTO.setImage(imageFile.getBytes());
             }
-            vehicleService.addVehicle(vehicleDTO); // Servis aracılığıyla veritabanına kaydedilir
-            return "redirect:/admin/vehicles/list?success"; // Başarılı yönlendirme
+
+            // Araç ekleme işlemi
+            vehicleService.addVehicle(vehicleDTO);
+
+            // Başarılı işlem sonrası yönlendirme ve mesaj eklenmesi
+            redirectAttributes.addAttribute("add", true);  // Başarı durumu eklenir
+            return "redirect:/admin/vehicles/list"; // Başarıyla listeye yönlendirme
+
         } catch (Exception e) {
             e.printStackTrace(); // Hata ayıklama
-            return "redirect:/admin/vehicles/add?error"; // Hatalı yönlendirme
+
+            // Hatalı işlem sonrası yönlendirme ve mesaj eklenmesi
+            redirectAttributes.addAttribute("error", "add");  // Hata durumu eklenir
+            return "redirect:/admin/vehicles/add"; // Hata sonrası tekrar ekleme sayfasına yönlendirme
         }
     }
+
 
     // Belirli bir aracı düzenlemek için form gösteren endpoint
     @GetMapping("/edit/{id}")
@@ -58,34 +80,46 @@ public class AdminVehicleController {
         return "admin/vehicle_edit";
     }
 
-    // Araç bilgilerini güncelleyen endpoint
     @PostMapping("/edit/{id}")
     public String updateVehicle(@PathVariable Long id,
                                 @ModelAttribute VehicleDTO vehicleDTO,
-                                @RequestParam("imageFile") MultipartFile imageFile) {
+                                @RequestParam("imageFile") MultipartFile imageFile,
+                                RedirectAttributes redirectAttributes) {
         try {
             // Yeni görsel yüklendiyse güncelle
             if (imageFile != null && !imageFile.isEmpty()) {
                 vehicleDTO.setImage(imageFile.getBytes());
             }
-            vehicleService.updateVehicle(id, vehicleDTO); // Güncelleme işlemi
-            return "redirect:/admin/vehicles/list?updated"; // Başarılı yönlendirme
+
+            // Güncelleme işlemi
+            vehicleService.updateVehicle(id, vehicleDTO);
+
+            // Başarı durumunda yönlendirme ve mesaj ekleme
+            redirectAttributes.addAttribute("updated", true);  // Başarı parametresi eklenir
+            return "redirect:/admin/vehicles/list"; // Başarıyla listeye yönlendirme
+
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/admin/vehicles/update/" + id + "?error"; // Hatalı yönlendirme
+
+            // Hata durumunda yönlendirme ve mesaj ekleme
+            redirectAttributes.addAttribute("error", "updated");  // Hata parametresi eklenir
+            return "redirect:/admin/vehicles/update/" + id; // Hatalı yönlendirme
         }
     }
 
-    // Aracı silen endpoint
+
     @PostMapping("/delete/{id}")
-    public String deleteVehicle(@PathVariable Long id) {
+    public String deleteVehicle(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             vehicleService.deleteVehicle(id); // Silme işlemi servis üzerinden yapılır
-            return "redirect:/admin/vehicles/list?deleted"; // Başarılı silme sonrası yönlendirme
+            redirectAttributes.addAttribute("deleted", true); // Başarı durumu eklenir
+            return "redirect:/admin/vehicles/list"; // Başarılı silme sonrası yönlendirme
         } catch (Exception e) {
-            return "redirect:/admin/vehicles/list?error=general"; // Hata durumunda yönlendirme
+            redirectAttributes.addAttribute("error", "rental"); // Silme hatası durumu eklenir
+            return "redirect:/admin/vehicles/list"; // Hatalı yönlendirme
         }
     }
+
 
 
     // Belirli bir aracın detaylarını gösteren endpoint

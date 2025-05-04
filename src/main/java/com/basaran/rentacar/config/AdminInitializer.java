@@ -1,5 +1,4 @@
 package com.basaran.rentacar.config;
-
 import com.basaran.rentacar.Entity.User;
 import com.basaran.rentacar.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;

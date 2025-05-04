@@ -24,6 +24,21 @@
       <div class="profile-container">
         <h2 class="text-center mb-4">Profil Bilgilerim</h2>
 
+        <!-- Başarı Mesajı -->
+        <div th:if="${param.success == 'profileUpdated'}" class="alert alert-success">
+          Profil başarıyla güncellendi.
+        </div>
+
+        <!-- Hata Mesajı (Genel) -->
+        <div th:if="${param.error != null and param.error.contains('profileUpdateError')}" class="alert alert-danger">
+          Profil güncellenirken bir hata oluştu.
+        </div>
+
+        <!-- Hata Mesajı (Hesap Silme) -->
+        <div th:if="${param.error != null and param.error.contains('accountDeleteError')}" class="alert alert-danger">
+          Kiralama yapmış hesap silinemez.
+        </div>
+
         <form th:action="@{/profile/update}" method="post">
           <div class="mb-3">
             <label class="form-label">Ad</label>

@@ -10,37 +10,45 @@
         <h2 class="mb-0">Kullanıcılar</h2>
     </div>
 
-    <!-- Silme başarılıysa -->
-
-    <div th:if="${param.deleted}">
-    <div class="alert alert-success d-flex align-items-center" role="alert">
-        <i class="fas fa-exclamation-triangle me-2"></i>
-        <div>
-            Kullanıcı başarıyla silindi.
-        </div>
-    </div>
-</div>
-
-    <!-- Sistem kullanıcısı silinmeye çalışıldıysa -->
-    <div th:if="${param.error != null and param.error.contains('systemuser')}">
-        <div class="alert alert-danger d-flex align-items-center" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i>
+    <!-- Güncelleme başarılıysa -->
+    <div th:if="${param.updated}">
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
             <div>
-                Sistem yöneticisi silinemez
+                Kullanıcı başarıyla güncellendi.
             </div>
         </div>
     </div>
+
+    <!-- Silme başarılıysa -->
+    <div th:if="${param.deleted}">
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <div>
+                Kullanıcı başarıyla silindi.
+            </div>
+        </div>
+    </div>
+
 
     <!-- Genel silme hatası -->
     <div th:if="${param.error != null and param.error.contains('general')}">
         <div class="alert alert-danger d-flex align-items-center" role="alert">
             <i class="fas fa-exclamation-triangle me-2"></i>
             <div>
-                Beklenmeyen bir hata oluştu.
+                Kullanıcının kiralanmış aracı var veya sistem kullancısı.
             </div>
         </div>
     </div>
-
+    <!-- Genel silme hatası -->
+    <div th:if="${param.error != null and param.error.contains('updated')}">
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div>
+                Kullanıcı güncellenirken bir hata oluştu.
+            </div>
+        </div>
+    </div>
 
     <!-- Kullanıcı Kartları -->
     <div class="row row-cols-1 row-cols-md-2 g-4" th:if="${users != null}">

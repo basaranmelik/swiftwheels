@@ -9,10 +9,27 @@
 <main class="container my-5 flex-grow-1">
     <h2 class="mb-4 text-center">Kiralama Kayıtları</h2>
 
-    <div th:if="${param.success}" class="alert alert-success">Kiralama işlemi başarılı.</div>
-    <div th:if="${param.deleted}" class="alert alert-warning">Kayıt silindi.</div>
-    <div th:if="${param.error}" class="alert alert-danger">İşlem sırasında hata oluştu.</div>
+    <!-- Başarı mesajı -->
+    <div th:if="${param.success}" class="alert alert-success">
+        Kiralama işlemi başarılı.
+    </div>
 
+    <!-- Kayıt silme mesajı -->
+    <div th:if="${param.deleted}" class="alert alert-warning">
+        Kayıt silindi.
+    </div>
+
+    <!-- Hata mesajları -->
+    <div th:if="${param.error != null}">
+        <div th:if="${param.error.contains('rentalError')}" class="alert alert-danger">
+            Kiralama işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.
+        </div>
+        <div th:if="${param.error.contains('deleteError')}" class="alert alert-danger">
+            Kiralama silinirken bir hata oluştu. Lütfen tekrar deneyin.
+        </div>
+    </div>
+
+    <!-- Kiralama Kayıtları Tablosu -->
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="table-light">

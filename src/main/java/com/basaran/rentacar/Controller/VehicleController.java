@@ -18,10 +18,20 @@ public class VehicleController {
 
     // Tüm araçları listeleyen endpoint
     @GetMapping("/list")
-    public String listVehicles(Model model) {
-        List<VehicleDTO> vehicles = vehicleService.getAllVehicles(); // Tüm araçlar alınır
-        model.addAttribute("vehicles", vehicles); // HTML template'e gönderilir
-        return "vehicle_list"; // templates klasöründe vehicle_list.html kullanılmalı
+    public String listVehicles(@RequestParam(required = false) String search, Model model) {
+        List<VehicleDTO> vehicles;
+
+        if (search != null && !search.isEmpty()) {
+            // Arama yapılacaksa, arama sonucu araçları getir
+            vehicles = vehicleService.searchByMakeOrModel(search);
+        } else {
+            // Eğer arama yoksa, tüm araçları listele
+            vehicles = vehicleService.getAllVehicles();
+        }
+
+        model.addAttribute("vehicles", vehicles);
+        model.addAttribute("searchTerm", search);  // Arama terimini formda göster
+        return "vehicle_list";
     }
 
     // Belirli bir aracın detaylarını gösteren endpoint
@@ -37,11 +47,4 @@ public class VehicleController {
         return "vehicle_detail";
     }
 
-    // Marka veya modele göre araç araması yapan endpoint
-    @GetMapping("/search")
-    public String searchVehicles(@RequestParam("query") String query, Model model) {
-        List<VehicleDTO> filtered = vehicleService.searchByMakeOrModel(query); // Arama yapılır
-        model.addAttribute("vehicles", filtered); // Sonuçlar liste sayfasına gönderilir
-        return "vehicle_list"; // Arama sonuçları aynı listeleme şablonunda gösterilir
-    }
 }

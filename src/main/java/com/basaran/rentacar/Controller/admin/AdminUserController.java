@@ -26,14 +26,14 @@ public class AdminUserController {
     @PostMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            userService.deleteUserById(id);
-            return "redirect:/admin/users/list?deleted";
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("sistem yöneticisidir")) {
-                return "redirect:/admin/users/list?error=systemuser";
-            }
-            return "redirect:/admin/users/list?error=general";
+            // Kullanıcıyı silme işlemi
+            userService.deleteUserById(id); // Silme işlemi
+            redirectAttributes.addAttribute("deleted", true); // Başarılı silme durumu
+        } catch (Exception e) {
+                redirectAttributes.addAttribute("error", "general"); // Sistem kullanıcısı hatası
+
         }
+        return "redirect:/admin/users/list";
     }
 
     // Kullanıcı düzenleme formunu göster
@@ -46,9 +46,18 @@ public class AdminUserController {
 
     // Kullanıcı bilgilerini güncelle
     @PostMapping("/edit/{id}")
-    public String updateUser(@PathVariable Long id, @ModelAttribute UserDTO userDTO) {
-        userService.updateUser(id, userDTO);
-        return "redirect:/admin/users/list?updated";
+    public String updateUser(@PathVariable Long id, @ModelAttribute UserDTO userDTO, RedirectAttributes redirectAttributes) {
+        try {
+            // Kullanıcıyı güncelleme işlemi
+            userService.updateUser(id, userDTO);
+            redirectAttributes.addAttribute("updated", true); // Başarılı güncelleme durumu
+        } catch (Exception e) {
+
+                redirectAttributes.addAttribute("error", "updated"); // Geçersiz email hatası
+
+        }
+        return "redirect:/admin/users/list";
     }
+
 
 }

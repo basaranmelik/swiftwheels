@@ -10,6 +10,17 @@
     <div class="col-md-6 bg-white p-5 rounded shadow">
       <h2 class="text-center mb-4">Hesap Aç</h2>
 
+      <!-- Başarı mesajı -->
+      <div th:if="${param.registerSuccess}" class="alert alert-success">
+        Kayıt başarılı! Giriş yapmak için tıklayın.
+      </div>
+
+
+      <div th:if="${param.error != null and param.error.contains('general')}" class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.
+      </div>
+
       <form method="post" th:action="@{/register}" class="px-3">
 
         <div class="mb-3">
